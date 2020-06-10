@@ -8,6 +8,11 @@ html{
 	font-family: 'Roboto', sans-serif;
 }
 
+.wrapper {
+  display: table;
+  height: 100%; width: 100%;
+}
+
 h1,h2,h3,span{
   margin: 0;
 }
@@ -15,12 +20,15 @@ h1,h2,h3,span{
 h1{
   font-size: 15rem;
 }
+
 h2{
   font-size: 3rem;
 }
+
 h3{
   font-size: 1.5rem;
 }
+
 span{
   font-size: 4rem;
 }
@@ -33,6 +41,7 @@ span{
   grid-template-rows: 10% 10% 80%;
   text-align: center;
   padding: 20px 4px;
+  height:auto !important;
 }
 
 .degrees{
@@ -47,4 +56,13 @@ span{
   grid-template-columns: auto auto auto;
   justify-content: center;
   margin: 2rem;
+}
+
+#back{
+	font-size: 1.3rem;
+	text-decoration:underline;
+	color: #111;
+}
+#back:hover{
+	text-decoration: none;
 }

@@ -1,180 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Your Weather - Simple API Test</title>
-
-    <!-- Internal CSS styles -->
+    <title>Weather App</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #333;
-        }
-
-        .weather-wrapper {
-            background-color: #fff;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            width: 90%;
-            max-width: 400px;
             padding: 20px;
+            background-color: #f0f0f0;
             text-align: center;
         }
-
-        .weather-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        h1 {
+            color: #333;
         }
-
-        .location h2 {
-            margin: 0;
-            font-size: 1.5em;
+        #weather-info {
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-
-        .location h2:nth-child(2) {
-            margin: 0 5px;
-            font-weight: normal;
-        }
-
-        .temperature h1 {
-            margin: 10px 0;
-            font-size: 3em;
-        }
-
-        .weather-icon {
+        #icon {
             width: 100px;
             height: 100px;
         }
-
-        .temperature {
-            margin: 15px 0;
-        }
-
-        .temperature span {
-            font-size: 1.5em;
-        }
-
-        #desc {
-            font-size: 1.2em;
-            font-weight: normal;
-        }
-
-        #back-link {
-            color: #007bff;
-            text-decoration: none;
-            margin-top: 15px;
-            font-size: 1em;
-        }
-
-        #back-link h6 {
-            margin: 0;
-        }
-
-        /* Responsive design */
-        @media (max-width: 500px) {
-            .weather-wrapper {
-                padding: 15px;
-            }
-
-            .temperature h1 {
-                font-size: 2.5em;
-            }
-
-            .weather-icon {
-                width: 80px;
-                height: 80px;
-            }
-        }
     </style>
 </head>
-
 <body>
+    <h1>Weather Information</h1>
+    <button onclick="getWeather()">Get Weather for My Location</button>
 
-    <div class="weather-wrapper">
-        <div class="weather-container">
-            <!-- Location Display -->
-            <div class="location">
-                <h2 id="city">Your City</h2>
-                <h2>,&nbsp;</h2>
-                <h2 id="country">Country</h2>
-            </div>
-
-            <!-- Weather Information -->
-            <div class="weather-details">
-                <div class="temperature">
-                    <h1 id="temp">00</h1>
-                    <span>&#8451;</span>
-                </div>
-                <img src="" alt="Weather Icon" id="icon" class="weather-icon">
-                <h3 id="desc">Description</h3>
-            </div>
-
-            <!-- Back to Projects Link -->
-            <a href="https://spw.netlify.app/#section2" id="back-link">
-                <h6>&lt;&lt; Go Back to Projects</h6>
-            </a>
-        </div>
+    <div id="weather-info">
+        <h2 id="city">City: Loading...</h2>
+        <h3 id="temp">Temperature: Loading...</h3>
+        <img src="" id="icon" alt="Weather Icon">
+        <p id="desc">Description: Loading...</p>
     </div>
 
-    <!-- External JS (jQuery) for AJAX and DOM manipulation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
     <script>
-        $(document).ready(function () {
-            // Geolocation to get user's location
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    const lat = position.coords.latitude;
-                    const lon = position.coords.longitude;
-
-                    // Fetch weather data based on the latitude and longitude
-                    fetchWeatherData(lat, lon);
-                }, function (error) {
-                    alert("Unable to retrieve your location.");
-                });
+        function getWeather() {
+            // Check if geolocation is supported
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(fetchWeatherData, handleLocationError);
             } else {
-                alert("Geolocation is not supported by this browser.");
+                alert("Geolocation is not supported by your browser.");
             }
+        }
 
-            // Function to fetch weather data from the OpenWeatherMap API
-            function fetchWeatherData(lat, lon) {
-                const API_KEY = "e73077c193d75f52c129d1aa03544d68"; // Replace with your OpenWeatherMap API key
-                const url = `https://api.openweathermap.org/data/2.5/weather?lat=13.1104768&lon=80.2258944&appid=${API_KEY}&units=metric`;
+        function fetchWeatherData(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            
+            // OpenWeather API URL with dynamic lat and lon
+            const apiKey = 'e73077c8d54b497bb0f5867c2874e2e6';
+            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
 
-                $.ajax({
-                    url: url,
-                    method: 'GET',
-                    success: function (data) {
-                        // Update the UI with the fetched data
-                        $('#city').text(data.name);
-                        $('#country').text(data.sys.country);
-                        $('#temp').text(data.main.temp.toFixed(1));
-                        $('#desc').text(data.weather[0].description);
+            // Fetch weather data
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data); // For debugging
+                    const city = data.name;
+                    const temp = data.main.temp;
+                    const desc = data.weather[0].description;
+                    const iconCode = data.weather[0].icon;
+                    const iconUrl = `http://openweathermap.org/img/wn/${iconCode}.png`;
 
-                        // Set weather icon
-                        const iconCode = data.weather[0].icon;
-                        $('#icon').attr('src', `http://openweathermap.org/img/wn/${iconCode}.png`);
-                    },
-                    error: function () {
-                        // If the API call fails, show an error message
-                        alert("Error fetching weather data. Please try again.");
-                    }
+                    // Update UI with fetched data
+                    document.getElementById("city").textContent = `City: ${city}`;
+                    document.getElementById("temp").textContent = `Temperature: ${temp}°C`;
+                    document.getElementById("desc").textContent = `Description: ${desc}`;
+                    document.getElementById("icon").src = iconUrl;
+                })
+                .catch(error => {
+                    console.error("Error fetching weather data:", error);
+                    alert("Failed to fetch weather data. Please try again later.");
                 });
-            }
-        });
+        }
+
+        function handleLocationError(error) {
+            alert("Unable to retrieve your location. Please make sure location services are enabled.");
+        }
     </script>
-
 </body>
-
 </html>

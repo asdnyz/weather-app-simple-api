@@ -1,68 +1,78 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto');
-
-html{
-	height:100%;
-	scroll-behavior: smooth;
-	margin: 0;
-	padding: 0;
-	font-family: 'Roboto', sans-serif;
+/* Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.wrapper {
-  display: table;
-  height: 100%; width: 100%;
+/* Basic Layout */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
 }
 
-h1,h2,h3,span{
-  margin: 0;
+/* Wrapper for the weather content */
+.weather-wrapper {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-h1{
-  font-size: 15rem;
+/* Container for the weather info */
+.weather-container {
+    text-align: center;
 }
 
-h2{
-  font-size: 3rem;
+/* Location and city name */
+.location h2 {
+    font-size: 1.5rem;
+    color: #333;
 }
 
-h3{
-  font-size: 1.5rem;
+/* Temperature and degree style */
+.temperature {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #333;
 }
 
-span{
-  font-size: 4rem;
+.temperature span {
+    font-size: 1.5rem;
+    color: #ff6f61;
 }
 
-.container{
-  max-width: 550px;
-  border: 1px solid black;
-  margin: auto;
-  display: grid;
-  grid-template-rows: 10% 10% 80%;
-  text-align: center;
-  padding: 20px 4px;
-  height:auto !important;
+/* Weather icon style */
+.weather-icon {
+    width: 100px;
+    height: 100px;
+    margin-top: 10px;
 }
 
-.degrees{
-  display: grid;
-  grid-template-columns: auto auto;
-  justify-content: center;
-  margin: 2rem;
+/* Description */
+#desc {
+    font-size: 1.2rem;
+    color: #555;
+    margin-top: 10px;
 }
 
-.location{
-  display: grid;
-  grid-template-columns: auto auto auto;
-  justify-content: center;
-  margin: 2rem;
+/* Back link */
+#back-link {
+    text-decoration: none;
+    color: #4CAF50;
+    font-weight: bold;
+    margin-top: 20px;
+    display: block;
 }
-
-#back{
-	font-size: 1.3rem;
-	text-decoration:underline;
-	color: #111;
-}
-#back:hover{
-	text-decoration: none;
+#back-link h6 {
+    font-size: 1rem;
+    text-align: center;
 }

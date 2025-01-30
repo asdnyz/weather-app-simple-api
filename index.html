@@ -107,7 +107,8 @@
 
         // Function to fetch weather data from Open-Meteo API
         async function fetchWeatherData(lat, lon) {
-            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=celsius&windspeed_unit=kph&timezone=America%2FNew_York`;
+         //   const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=celsius&windspeed_unit=kph&timezone=America%2FNew_York`;
+const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=celsius&windspeed_unit=kph&timezone=auto`;
 
             const response = await fetch(url);
             const data = await response.json();

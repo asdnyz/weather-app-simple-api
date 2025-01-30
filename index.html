@@ -1,192 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Weather App - Powered by Open-Meteo</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: Arial, sans-serif;
-      background: #f0f4f8;
-      color: #333;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
-    }
-    .app-container {
-      max-width: 800px;
-      width: 100%;
-      text-align: center;
-      padding: 20px;
-      background: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    }
-    .title {
-      font-size: 2rem;
-      margin-bottom: 20px;
-    }
-    .location-input {
-      margin-bottom: 20px;
-    }
-    input[type="text"] {
-      padding: 10px;
-      width: 80%;
-      font-size: 1rem;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      margin-right: 10px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 1rem;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-    .weather-info {
-      margin-top: 30px;
-      font-size: 1.5rem;
-      text-align: center;
-    }
-    .forecast-container {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 20px;
-      margin-top: 30px;
-    }
-    .forecast-item {
-      padding: 10px;
-      background-color: #e6f7ff;
-      border-radius: 5px;
-      text-align: center;
-    }
-    .forecast-item h3 {
-      margin-bottom: 10px;
-      font-size: 1.2rem;
-    }
-    .forecast-item p {
-      font-size: 1rem;
-    }
-  </style>
-</head>
-<body>
-  <div class="app-container">
-    <div class="title">Weather Forecast Powered by Open-Meteo</div>
-    
-    <!-- User Input for Location -->
-    <div class="location-input">
-      <input type="text" id="location" placeholder="Enter city or coordinates (e.g., 40.7128,-74.0060)" />
-      <button onclick="getWeatherData()">Get Weather</button>
-    </div>
-    
-    <!-- Current Weather -->
-    <div class="weather-info" id="currentWeather">
-      <!-- Current weather data will appear here -->
-    </div>
-
-    <!-- 7-Day Forecast -->
-    <div class="forecast-container" id="forecastContainer">
-      <!-- 7-Day Forecast data will appear here -->
-    </div>
-  </div>
-
-  <script>
-    const baseUrl = "https://api.open-meteo.com/v1/forecast";
-
-    // Get Weather Data (Current & 7-Day Forecast)
-    async function getWeatherData() {
-      const locationInput = document.getElementById("location").value;
-      let lat, lon;
-
-      // Check if it's a valid city or coordinates
-      if (locationInput.includes(",")) {
-        const [latitude, longitude] = locationInput.split(",");
-        lat = parseFloat(latitude);
-        lon = parseFloat(longitude);
-      } else {
-        const cityData = await getCoordinatesFromCity(locationInput);
-        if (cityData) {
-          lat = cityData.latitude;
-          lon = cityData.longitude;
-        } else {
-          alert("City not found!");
-          return;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-      }
 
-      try {
-        // Fetch Current Weather
-        const currentWeather = await fetch(`${baseUrl}?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`);
-        const currentWeatherData = await currentWeather.json();
-        displayCurrentWeather(currentWeatherData);
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
 
-        // Fetch 7-Day Forecast
-        const forecast = await fetch(`${baseUrl}?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max&timezone=auto`);
-        const forecastData = await forecast.json();
-        displayForecast(forecastData);
-      } catch (error) {
-        alert("Error fetching weather data");
-        console.error(error);
-      }
-    }
+        .input-group {
+            margin-bottom: 20px;
+        }
 
-    // Get Coordinates from City Name (Geocoding)
-    async function getCoordinatesFromCity(city) {
-      const geocodingUrl = `https://geocode.maps.co/search?city=${city}&format=json`;
-      const response = await fetch(geocodingUrl);
-      const data = await response.json();
-      return data.length > 0 ? data[0] : null;
-    }
+        input[type="text"] {
+            padding: 10px;
+            width: 80%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
 
-    // Display Current Weather Data
-    function displayCurrentWeather(data) {
-      const { current_weather } = data;
-      const currentWeatherElement = document.getElementById("currentWeather");
-      currentWeatherElement.innerHTML = `
-        <h3>Current Weather</h3>
-        <p>Temperature: ${current_weather.temperature}°C</p>
-        <p>Wind Speed: ${current_weather.windspeed} km/h</p>
-        <p>Weather: ${current_weather.weathercode}</p>
-      `;
-    }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-    // Display 7-Day Forecast Data
-    function displayForecast(data) {
-      const forecastContainer = document.getElementById("forecastContainer");
-      forecastContainer.innerHTML = "";
+        button:hover {
+            background-color: #45a049;
+        }
 
-      data.daily.temperature_2m_max.forEach((tempMax, index) => {
-        const tempMin = data.daily.temperature_2m_min[index];
-        const windSpeed = data.daily.wind_speed_10m_max[index];
-        const precipitation = data.daily.precipitation_sum[index];
-        const day = new Date(data.daily.time[index]);
+        .weather {
+            margin-top: 20px;
+        }
 
-        const forecastItem = document.createElement("div");
-        forecastItem.classList.add("forecast-item");
-        forecastItem.innerHTML = `
-          <h3>${day.toLocaleDateString()}</h3>
-          <p>Max Temp: ${tempMax}°C</p>
-          <p>Min Temp: ${tempMin}°C</p>
-          <p>Wind Speed: ${windSpeed} km/h</p>
-          <p>Precipitation: ${precipitation} mm</p>
-        `;
-        forecastContainer.appendChild(forecastItem);
-      });
-    }
-  </script>
+        .temp {
+            font-size: 50px;
+        }
+
+        .description {
+            font-size: 20px;
+            color: #555;
+        }
+
+        .icon {
+            font-size: 60px;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Weather App</h2>
+        <div class="input-group">
+            <input type="text" id="cityInput" placeholder="Enter city name" />
+            <button onclick="getWeather()">Get Weather</button>
+        </div>
+
+        <div id="weatherInfo" class="weather"></div>
+        <div id="errorMessage" class="error"></div>
+    </div>
+
+    <script>
+        // OpenCage API key (replace with your key)
+        const geocodeAPIKey = '6187a6dbe7dd4fa0bdef87e8580959d8'; // Replace with your OpenCage API key
+
+        // Function to fetch coordinates from the city name using OpenCage API
+        async function getCoordinates(city) {
+            const url = `https://api.opencagedata.com/geocode/v1/json?q=${city}&key=${geocodeAPIKey}`;
+
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.results.length > 0) {
+                return data.results[0].geometry;
+            } else {
+                throw new Error("City not found");
+            }
+        }
+
+        // Function to fetch weather data from Open-Meteo API
+        async function fetchWeatherData(lat, lon) {
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=celsius&windspeed_unit=kph&timezone=America%2FNew_York`;
+
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.current_weather) {
+                return data.current_weather;
+            } else {
+                throw new Error("Weather data not available");
+            }
+        }
+
+        // Function to display the weather data
+        async function getWeather() {
+            const city = document.getElementById('cityInput').value;
+            const errorMessageElement = document.getElementById('errorMessage');
+            const weatherInfoElement = document.getElementById('weatherInfo');
+            errorMessageElement.textContent = '';
+            weatherInfoElement.innerHTML = '';
+
+            try {
+                const coordinates = await getCoordinates(city);
+                const weatherData = await fetchWeatherData(coordinates.lat, coordinates.lng);
+
+                // Display weather data
+                const { temperature, windspeed, weathercode } = weatherData;
+                const weatherIcon = getWeatherIcon(weathercode);
+
+                weatherInfoElement.innerHTML = `
+                    <div class="temp">${temperature}°C</div>
+                    <div class="description">${weatherIcon}</div>
+                    <div class="description">Windspeed: ${windspeed} km/h</div>
+                `;
+            } catch (error) {
+                errorMessageElement.textContent = error.message;
+            }
+        }
+
+        // Function to get weather icon based on weather code
+        function getWeatherIcon(code) {
+            switch (code) {
+                case 0:
+                    return `<i class="fas fa-sun icon"></i> Clear`;
+                case 1:
+                    return `<i class="fas fa-cloud icon"></i> Partly Cloudy`;
+                case 2:
+                    return `<i class="fas fa-cloud icon"></i> Cloudy`;
+                case 3:
+                    return `<i class="fas fa-cloud-rain icon"></i> Rainy`;
+                case 4:
+                    return `<i class="fas fa-snowflake icon"></i> Snow`;
+                default:
+                    return `<i class="fas fa-question-circle icon"></i> Unknown`;
+            }
+        }
+    </script>
 </body>
+
 </html>

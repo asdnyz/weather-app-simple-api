@@ -89,11 +89,11 @@
 
     <script>
         // OpenCage API key (replace with your key)
-        const geocodeAPIKey = '6187a6dbe7dd4fa0bdef87e8580959d8'; // Replace with your OpenCage API key
+        const geoAPIKey = '6187a6dbe7dd4fa0bdef87e8580959d8'; // Replace with your OpenCage API key
 
         // Function to fetch coordinates from the city name using OpenCage API
         async function getCoordinates(city) {
-            const url = `https://api.opencagedata.com/geocode/v1/json?q=${city}&key=${geocodeAPIKey}`;
+            const url = `https://api.opencagedata.com/geocode/v1/json?q=${city}&key=${geoAPIKey}`;
 
             const response = await fetch(url);
             const data = await response.json();

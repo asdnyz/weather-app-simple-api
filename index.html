@@ -1,26 +1,43 @@
-<html>
-<head><title>Your Weather - Simple API Test</title>
-	<link rel ="stylesheet" href="./weather.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="./script.js"></script>
-	
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Your Weather - Simple API Test</title>
+    <!-- Link to External CSS -->
+    <link rel="stylesheet" href="weather.css">
+    <!-- jQuery for handling AJAX requests -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
-<div class="wrapper tabled">
-<div class="container">
-	<div class="location">
-  <h2 id="city">Your City</h2><h2>&#44;&nbsp;</h2><h2 id="country">Country</h2>
-  </div>
-  <div class="middle">
-    <div class="degrees">
-      <h1 id="temp">00</h1>
-      <span>&#8451;</span>
-    </div>
-	<img src="" alt="icon" id="icon" style="width:100px;height:100px;">
-    <h3 id="desc">Description</h3>
-	<a href="https://spw.netlify.app/#section2" id="back"><h6><< Go Back to Projects</h5></a>
-  </div>
-</div>
-</div>
+
+    <main class="weather-wrapper">
+        <section class="weather-container">
+            <!-- Location Display -->
+            <div class="location">
+                <h2 id="city">Your City</h2>
+                <h2>,&nbsp;</h2>
+                <h2 id="country">Country</h2>
+            </div>
+
+            <!-- Weather Information -->
+            <div class="weather-details">
+                <div class="temperature">
+                    <h1 id="temp">00</h1>
+                    <span>&#8451;</span>
+                </div>
+                <img src="" alt="Weather Icon" id="icon" class="weather-icon">
+                <h3 id="desc">Description</h3>
+            </div>
+
+            <!-- Back to Projects Link -->
+            <a href="https://spw.netlify.app/#section2" id="back-link">
+                <h6>&lt;&lt; Go Back to Projects</h6>
+            </a>
+        </section>
+    </main>
+
 </body>
 </html>
